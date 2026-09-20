@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="COSMIC QUIZ — A NASA-inspired mission to test your knowledge of Earth, the Solar System, and the Universe. Launch your mission now.">
+    <title>COSMIC QUIZ — Space Mission Command</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Starfield Background -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Grid Overlay -->
+    <div class="grid-overlay"></div>
+
+    <!-- Scan Line Effect -->
+    <div class="scanline"></div>
+
+    <!-- ═══════════ HEADER / NAV ═══════════ -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 40 40" width="36" height="36">
+                        <circle cx="20" cy="20" r="18" fill="none" stroke="var(--nasa-red)" stroke-width="2" />
+                        <ellipse cx="20" cy="20" rx="18" ry="7" fill="none" stroke="rgba(255,255,255,0.25)"
+                            stroke-width="1" transform="rotate(-25 20 20)" />
+                        <circle cx="20" cy="20" r="4" fill="var(--nasa-red)" />
+                        <circle cx="20" cy="7" r="2" fill="var(--accent-cyan)" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">COSMIC QUIZ</span>
+                    <span class="logo-sub">SPACE MISSION COMMAND</span>
+                </div>
+            </div>
+            <div class="header-telemetry">
+                <div class="telemetry-item">
+                    <span class="tele-label">STATUS</span>
+                    <span class="tele-value status-online"><span class="status-dot"></span> ONLINE</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="tele-label">MISSION TIME</span>
+                    <span class="tele-value" id="mission-clock">00:00:00</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="tele-label">SIGNAL</span>
+                    <span class="tele-value signal-bars">
+                        <span class="bar active"></span>
+                        <span class="bar active"></span>
+                        <span class="bar active"></span>
+                        <span class="bar active"></span>
+                        <span class="bar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════ LANDING SCREEN ═══════════ -->
+    <main id="landing-screen" class="screen active">
+        <div class="landing-layout">
+            <div class="landing-hero">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span> MISSION READY
+                </div>
+                <h1 class="hero-headline">
+                    <span class="headline-thin">EXPLORE THE</span>
+                    <span class="headline-bold">COSMOS</span>
+                </h1>
+                <p class="hero-desc">
+                    Embark on an interstellar knowledge mission. Navigate through challenges about our planet,
+                    the solar neighborhood, and the vast universe beyond. How far can your knowledge reach?
+                </p>
+                <div class="hero-actions">
+                    <button id="btn-start" class="btn-mission btn-primary-mission">
+                        <span class="btn-icon-left">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polygon points="5 3 19 12 5 21" />
+                            </svg>
+                        </span>
+                        LAUNCH MISSION
+                    </button>
+                </div>
+                <div class="hero-stats-row">
+                    <div class="hero-stat">
+                        <span class="hs-value">3</span>
+                        <span class="hs-label">CATEGORIES</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hs-value">30</span>
+                        <span class="hs-label">QUESTIONS</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="hero-stat">
+                        <span class="hs-value">∞</span>
+                        <span class="hs-label">DISCOVERY</span>
+                    </div>
+                </div>
+            </div>
+            <div class="landing-visual">
+                <div class="planet-hero">
+                    <div class="planet-sphere"></div>
+                    <div class="planet-ring-1"></div>
+                    <div class="planet-ring-2"></div>
+                    <div class="planet-glow"></div>
+                    <div class="orbit-dot dot-1"></div>
+                    <div class="orbit-dot dot-2"></div>
+                    <div class="orbit-dot dot-3"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══════════ CATEGORY SCREEN ═══════════ -->
+    <section id="category-screen" class="screen">
+        <div class="screen-container">
+            <div class="screen-top-bar">
+                <button id="btn-back-home" class="btn-back-nav">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    BACK
+                </button>
+                <div class="breadcrumb">
+                    <span class="bc-item">HOME</span>
+                    <span class="bc-sep">/</span>
+                    <span class="bc-item active">SELECT MISSION</span>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <div class="section-tag">MISSION SELECT</div>
+                <h2 class="section-title">Choose Your Destination</h2>
+                <p class="section-desc">Each mission tests your knowledge in a different domain of space science. Select
+                    a
+                    mission to begin your expedition.</p>
+            </div>
+
+            <div class="mission-grid">
+                <!-- EARTH -->
+                <button class="mission-card" data-category="earth">
+                    <div class="mc-image-area earth-bg">
+                        <div class="mc-overlay"></div>
+                        <div class="mc-badge-row">
+                            <span class="mc-diff easy">BEGINNER</span>
+                        </div>
+                        <div class="mc-planet-icon">🌍</div>
+                    </div>
+                    <div class="mc-info">
+                        <div class="mc-header-row">
+                            <h3 class="mc-title">EARTH</h3>
+                            <span class="mc-mission-id">MSN-001</span>
+                        </div>
+                        <p class="mc-desc">Atmosphere, geology, oceans, and the living systems of our home planet.</p>
+                        <div class="mc-meta-row">
+                            <span class="mc-meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg> ~5 min</span>
+                            <span class="mc-meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <path d="M9 12l2 2 4-4" />
+                                </svg> 10 Tasks</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- SOLAR SYSTEM -->
+                <button class="mission-card" data-category="solar-system">
+                    <div class="mc-image-area solar-bg">
+                        <div class="mc-overlay"></div>
+                        <div class="mc-badge-row">
+                            <span class="mc-diff medium">INTERMEDIATE</span>
+                        </div>
+                        <div class="mc-planet-icon">☀️</div>
+                    </div>
+                    <div class="mc-info">
+                        <div class="mc-header-row">
+                            <h3 class="mc-title">SOLAR SYSTEM</h3>
+                            <span class="mc-mission-id">MSN-002</span>
+                        </div>
+                        <p class="mc-desc">Planets, moons, asteroids, comets, and the star that binds them all.</p>
+                        <div class="mc-meta-row">
+                            <span class="mc-meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg> ~7 min</span>
+                            <span class="mc-meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <path d="M9 12l2 2 4-4" />
+                                </svg> 10 Tasks</span>
+                        </div>
+                    </div>
+                </button>
+
+                <!-- UNIVERSE -->
+                <button class="mission-card" data-category="universe">
+                    <div class="mc-image-area universe-bg">
+                        <div class="mc-overlay"></div>
+                        <div class="mc-badge-row">
+                            <span class="mc-diff hard">ADVANCED</span>
+                        </div>
+                        <div class="mc-planet-icon">🌌</div>
+                    </div>
+                    <div class="mc-info">
+                        <div class="mc-header-row">
+                            <h3 class="mc-title">UNIVERSE</h3>
+                            <span class="mc-mission-id">MSN-003</span>
+                        </div>
+                        <p class="mc-desc">Galaxies, black holes, dark matter, and the deepest mysteries of the cosmos.
+                        </p>
+                        <div class="mc-meta-row">
+                            <span class="mc-meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg> ~10 min</span>
+                            <span class="mc-meta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                                    <path d="M9 12l2 2 4-4" />
+                                </svg> 10 Tasks</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ QUIZ SCREEN ═══════════ -->
+    <section id="quiz-screen" class="screen">
+        <div class="screen-container quiz-container">
+            <!-- Quiz Top Bar -->
+            <div class="quiz-top-bar">
+                <button id="btn-back-cat" class="btn-back-nav">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    ABORT
+                </button>
+                <div class="quiz-hud">
+                    <div class="hud-item">
+                        <span class="hud-label">MISSION</span>
+                        <span class="hud-value" id="quiz-category-label">EARTH</span>
+                    </div>
+                    <div class="hud-divider"></div>
+                    <div class="hud-item">
+                        <span class="hud-label">TASK</span>
+                        <span class="hud-value" id="quiz-progress">01 / 10</span>
+                    </div>
+                    <div class="hud-divider"></div>
+                    <div class="hud-item">
+                        <span class="hud-label">SCORE</span>
+                        <span class="hud-value score-val" id="score-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mission-progress-track">
+                <div id="progress-bar-fill" class="mission-progress-fill"></div>
+                <div class="progress-markers">
+                    <span class="pm" data-n="1"></span><span class="pm" data-n="2"></span><span class="pm"
+                        data-n="3"></span>
+                    <span class="pm" data-n="4"></span><span class="pm" data-n="5"></span><span class="pm"
+                        data-n="6"></span>
+                    <span class="pm" data-n="7"></span><span class="pm" data-n="8"></span><span class="pm"
+                        data-n="9"></span>
+                    <span class="pm" data-n="10"></span>
+                </div>
+            </div>
+
+            <!-- Question Panel -->
+            <div class="quiz-main">
+                <div id="question-panel" class="question-panel">
+                    <div class="qp-header">
+                        <span class="qp-tag" id="question-number">TASK 01</span>
+                        <span class="qp-timer" id="question-timer">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                            <span id="timer-display">00:00</span>
+                        </span>
+                    </div>
+                    <h2 id="question-text" class="qp-question"></h2>
+                </div>
+
+                <div id="options-grid" class="options-grid">
+                    <!-- Options injected by JS -->
+                </div>
+
+                <!-- Fun Fact (shown after answering) -->
+                <div id="fun-fact" class="mission-brief hidden">
+                    <div class="brief-header">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4M12 8h.01" />
+                        </svg>
+                        <span>MISSION INTEL</span>
+                    </div>
+                    <p id="fun-fact-text" class="brief-text"></p>
+                </div>
+
+                <button id="btn-next" class="btn-mission btn-primary-mission btn-next-q hidden">
+                    <span>NEXT TASK</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ RESULTS SCREEN ═══════════ -->
+    <section id="results-screen" class="screen">
+        <div class="screen-container results-container">
+            <div class="results-layout">
+                <!-- Left: Score Visualization -->
+                <div class="results-viz">
+                    <div class="result-ring-wrap">
+                        <svg viewBox="0 0 200 200" class="result-ring-svg">
+                            <defs>
+                                <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="var(--nasa-red)" />
+                                    <stop offset="100%" stop-color="var(--accent-cyan)" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="100" cy="100" r="85" class="ring-bg" />
+                            <circle id="ring-progress" cx="100" cy="100" r="85" class="ring-fill" />
+                        </svg>
+                        <div class="ring-center-data">
+                            <span id="results-score" class="ring-score-num">0</span>
+                            <span class="ring-score-total">/ 10</span>
+                            <span class="ring-score-label">CORRECT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Mission Debrief -->
+                <div class="results-debrief">
+                    <div class="debrief-badge" id="results-badge-wrap">
+                        <span id="results-emoji" class="db-emoji">🏆</span>
+                    </div>
+                    <div class="debrief-tag">MISSION DEBRIEF</div>
+                    <h2 id="results-title" class="debrief-title">Mission Accomplished</h2>
+                    <p id="results-subtitle" class="debrief-desc">Outstanding performance, Commander. Your knowledge of
+                        the cosmos
+                        is exceptional.</p>
+
+                    <div class="debrief-stats">
+                        <div class="ds-item">
+                            <span class="ds-value correct-c" id="stat-correct">0</span>
+                            <span class="ds-label">CORRECT</span>
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-value wrong-c" id="stat-wrong">0</span>
+                            <span class="ds-label">INCORRECT</span>
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-value" id="stat-percent">0%</span>
+                            <span class="ds-label">ACCURACY</span>
+                        </div>
+                        <div class="ds-item">
+                            <span class="ds-value" id="stat-time">00:00</span>
+                            <span class="ds-label">TOTAL TIME</span>
+                        </div>
+                    </div>
+
+                    <div class="debrief-actions">
+                        <button id="btn-retry" class="btn-mission btn-primary-mission">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 4v6h6M23 20v-6h-6" />
+                                <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15" />
+                            </svg>
+                            RETRY MISSION
+                        </button>
+                        <button id="btn-new-cat" class="btn-mission btn-secondary-mission">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                            </svg>
+                            NEW MISSION
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
